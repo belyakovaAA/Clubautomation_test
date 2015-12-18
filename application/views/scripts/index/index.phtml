@@ -1,0 +1,55 @@
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+        <script type="text/javascript" src="/javascript/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/javascript/main.js"></script>
+        <title><?php echo $this->escape($this->title); ?></title> 
+    </head> 
+    <body> 
+        <div>
+            <h1><?php echo $this->escape($this->title); ?></h1>
+            <div class="js-tableContainer">
+                <table class="js-table" cellspacing="2" border="1" cellpadding="5">
+                    <tr>
+                        <td>
+                            Основные валюты
+                        </td>
+                    <?php foreach($this->currencies as $currency) : ?>
+                        <td width="100">
+                            <?php echo $this->escape($currency->getTitle()); ?>
+                        </td>
+                    <?php endforeach; ?>
+                        <td></td>
+                    </tr>
+                    <?php foreach($this->currencies as $baseCurrency) : ?>
+                        <tr>
+                            <td>
+                                <?php echo $this->escape($baseCurrency->getTitle()); ?>
+                            </td>
+                            <?php foreach($this->currencies as $quotatedCurrency) : ?>
+                                <td>
+                                    <?php $baseCurrencyId = $baseCurrency->getId();
+                                        $quotatedCurrencyId = $quotatedCurrency->getId();
+                                        $quotation = $baseCurrencyId == $quotatedCurrencyId
+                                            ? '-'
+                                            : $this->quotations[$baseCurrencyId][$quotatedCurrencyId]->getQuotation();
+                                        echo $quotation?>
+                                </td>
+                            <?php endforeach; ?>
+                            <td>
+                                <input class="js-deleteCurrency" type="button" value="Удалить валюту" onclick="deleteCurrency(<?php echo $baseCurrency->getId() ?>, $(this));">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+        </div>
+        <div>
+            <input class="js-updateQuotation" type="button" value="Обновить данные курса валют" onclick="updateQuotation();">
+        </div>
+        <div>
+            <input class="js-currencyLetterCode" type='text' placeholder="Введите буквенный код валюты">
+            <input class="js-addCurrency" type='button' value="Добавить валюту" onclick="addCurrency();">
+        </div>
+    </body> 
+</html> 
